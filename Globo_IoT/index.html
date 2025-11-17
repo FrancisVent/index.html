@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Somengil - IoT Office Screen</title>
+
+<link rel="stylesheet" href="styles.css">
+<link href="https://fonts.cdnfonts.com/css/satoshi" rel="stylesheet">
+<link rel="icon" type="images/icon" href="images/favicon.jpg">
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://esm.sh/three",
+    "three/": "https://esm.sh/three/"
+  }
+}
+</script>
+</head>
+
+<body>
+
+<!-- radios placed at top-level so CSS can target siblings with :checked ~ selectors -->
+<input type="radio" id="daily-report" name="report-type" class="toggle-input" checked>
+<input type="radio" id="connected-machines" name="report-type" class="toggle-input">
+
+<div id="toggle-container">
+    <label for="daily-report" class="toggle-btn toggle-btn-label">CONNECTED MACHINES</label>
+
+    <label for="connected-machines" class="toggle-btn toggle-btn-label">MULTIWASHER</label>
+
+    <span class="toggle-slider"></span>
+</div>
+
+<div id="info-box">
+    <div class="number">364</div>
+    <div class="label">EQUIPMENTS CONNECTED</div>
+    <div class="label">WORLDWIDE</div>
+</div>
+
+<div id="pie-chart-card">
+    <h2></h2>
+    <div id="canvas-container">
+        <canvas id="machineChart"></canvas>
+    </div>
+
+    <ul id="chart-details">
+        <li><span class="color-swatch" style="background-color: #808080;"></span><span class="label-text">EUROPE</span><span class="chart-percentage">73.5%</span></li>
+        <li><span class="color-swatch" style="background-color: #D3D3D3;"></span><span class="label-text">AMERICA</span><span class="chart-percentage">17.9%</span></li>
+        <li><span class="color-swatch" style="background-color: #FFFFFF;"></span><span class="label-text">AFRICA</span><span class="chart-percentage">0.5%</span></li>
+        <li><span class="color-swatch" style="background-color: #505050;"></span><span class="label-text">ASIA</span><span class="chart-percentage">7.1%</span></li>
+        <li><span class="color-swatch" style="background-color: #312f31;"></span><span class="label-text">OCEANIA</span><span class="chart-percentage">1.0%</span></li>
+    </ul>
+</div>
+
+<div id="play-pause-container">
+    <button id="resetBtn">RESET</button>
+    <button id="playPauseBtn">PAUSE</button>
+</div>
+
+<div id="globeViz"></div>
+
+<!-- Image container shown when MULTIWASHER is selected -->
+<div id="multiwasher-image" aria-hidden="true">
+    <img src="images/diagram.png" alt="Multiwasher" />
+</div>
+
+<img id="logo" src="https://static.wixstatic.com/media/a6967f_b1478a338afc4870879e1ba83f915dc5~mv2.png" alt="Logo Multiwasher" />
+<img id="logo2" src="https://static.wixstatic.com/media/a6967f_691cf1aade3c471c816d1071b0c6ebdd~mv2.png" alt="Logo Somengil" />
+
+<script type="module" src="script.js"></script>
+
+</body>
+</html>

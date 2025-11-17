@@ -1,0 +1,252 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: radial-gradient(circle at center, #191822 0.5%, #000000 100%);
+    font-family: 'Satoshi', sans-serif;
+}
+
+#globeViz {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+#logo {
+    position: absolute; top: 30px; left: 30px; width: 180px; border-radius: 5px; z-index:10; /* Multiwasher */
+}
+#logo2 {
+    position: absolute; top: 30px; right: 30px; width: 180px; border-radius: 5px; z-index:10; /* Somengil */
+}
+
+/* Toggle (radiogroup) */
+#toggle-container {
+    position: fixed;
+    top: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 30;
+    background-color: rgba(255, 255, 255, 0.06);
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    padding: clamp(0px, 1.6vw, 10px) clamp(0px, 1vw, 6px);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.35);
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(104,104,104,0.8);
+    user-select: none;
+}
+
+/* visually-hidden but focusable */
+.toggle-input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: 1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+.toggle-btn {
+    position: relative;
+    z-index: 2;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: clamp(110px, 22vw, 160px);
+    /* vertical padding / horizontal padding (same left & right) */
+    padding: clamp(4px, 1.8vw, 10px) clamp(14px, 2.5vw, 40px);
+    color: #fff;
+    font-weight: 700;
+    font-size: clamp(0.75rem, 1.6vw, 0.95rem);
+    letter-spacing: 0.6px;
+    cursor: pointer;
+    border-radius: 999px;
+    background: transparent;
+    transition: color .18s ease, transform .18s ease;
+}
+
+/* hover (only when not active) */
+.toggle-btn:hover { color: #50B6E8;}
+
+/* slider track */
+.toggle-slider {
+    position: absolute;
+    color: #ffffff;
+    left: 0;
+    top: 4px;
+    height: calc(100% - 8px);
+    width: 0;
+    background: linear-gradient(90deg, rgba(255,255,255,0.08), rgba(255,255,255,0.14));
+    border-radius: 999px;
+    transition: left .28s cubic-bezier(.2,.9,.2,1), width .28s ease, background .18s ease;
+    z-index: 1;
+    pointer-events: none;
+    box-sizing: border-box;
+}
+/* Note: slider position/width is controlled at runtime by JS so it can hug the active label */
+/* Make the slider visually 'active' (solid white) when a selection is checked */
+#daily-report:checked ~ #toggle-container .toggle-slider,
+#connected-machines:checked ~ #toggle-container .toggle-slider {
+    background: #ffffff;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.16);
+}
+
+/* active/inactive label colors and background */
+/* When radios are placed outside the visual toggle, target the labels inside the container */
+#daily-report:checked ~ #toggle-container label[for="daily-report"],
+#connected-machines:checked ~ #toggle-container label[for="connected-machines"] {
+    color: #000;
+    z-index: 3;
+    background: transparent;
+    transition: color .18s ease;
+}
+
+#daily-report:not(:checked) ~ #toggle-container label[for="daily-report"],
+#connected-machines:not(:checked) ~ #toggle-container label[for="connected-machines"] {
+    color: #fff;
+}
+
+/* keyboard focus - show ring when the hidden input is focused */
+.toggle-input:focus + .toggle-btn, .toggle-btn:focus {
+    outline: 3px solid rgba(80,182,232,0.18);
+    outline-offset: 3px;
+}
+
+/* helper: screen-reader only */
+.sr-only {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+}
+
+#info-box {
+    position: absolute; top: 50%; right: 12%; transform: translateY(-50%);
+    z-index: 15; padding: 20px; color: #fff;
+    text-align: centlefter; width: 200px;
+}
+#info-box .number {
+    font-size: 3em; font-weight: bold; margin-bottom: 5px;
+}
+#info-box .label {
+    font-size: 1em; 
+    text-align: left;
+}
+
+#pie-chart-card {
+    position: absolute; bottom: 30px; left: 30px; z-index: 15;
+    background-color: rgba(255, 255, 255, 0.06);
+    border-radius: 24px; padding: 12px 24px; color: #fff;
+    width: 350px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.7);
+    display: flex; flex-direction: row; align-items: center;
+    gap: 10px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+    backdrop-filter: blur(3px);
+    /* visible stroke/border */
+    border: 1px solid rgba(104,104,104,0.8);
+}
+#pie-chart-card h2 {
+    font-size: 1.2em; margin-bottom: 10px;
+}
+
+#canvas-container { width: 250px; height: 150px; margin-right: 32px; }
+
+#legend { display: flex; flex-direction: column; width: 20px; }
+
+#chart-details {
+    list-style: none; padding: 0; margin: 0; width: 100%; font-size: .9em;
+}
+#chart-details li {
+    padding: 4px 0; border-bottom: 1px solid rgba(255,255,255,0.1);
+    display: flex; align-items: center; justify-content: space-between;
+}
+#chart-details li:last-child { border-bottom: none; }
+
+/* Ensure the label text inside the chart details aligns left and takes available space */
+#chart-details .label-text {
+    flex: 1 1 auto;
+    text-align: left;
+    margin: 0 8px;
+}
+
+#chart-details .chart-percentage {
+    white-space: nowrap;
+    margin-left: 8px;
+}
+
+.color-swatch {
+    display: inline-block; width: 12px; height: 12px; margin-right: 8px;
+    border-radius: 2px; border: 1px solid rgba(255,255,255,0.3);
+}
+
+#play-pause-container {
+    position: absolute; bottom: 30px; right: 30px; z-index:20;
+    display: flex; gap: 12px; align-items: center;
+}
+
+#playPauseBtn, #resetBtn {
+    padding: 20px 20px;
+    background-color: rgba(222,214,213,0.1);
+    color: #fff; border: 1px solid rgba(255,255,255,0.3); border-radius: 12px;
+    font-size: 1.2em;
+    cursor: pointer; font-weight: 500;
+    display: flex; align-items: center;
+    gap: 8px; transition: background-color .3s ease;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+    font-size: 0.9rem;
+}
+#playPauseBtn:hover, #resetBtn:hover { background-color: rgba(255,255,255,0.15); }
+
+/* Show/hide major sections when MULTIWASHER is selected */
+#connected-machines:checked ~ #globeViz,
+#connected-machines:checked ~ #pie-chart-card,
+#connected-machines:checked ~ #play-pause-container,
+#connected-machines:checked ~ #info-box {
+    display: none !important;
+}
+
+/* Show the image container when MULTIWASHER is selected */
+#connected-machines:checked ~ #multiwasher-image {
+    display: flex !important;
+}
+
+/* Multiwasher image container (hidden by default) */
+#multiwasher-image {
+    display: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, calc(-50% + 50px));
+    z-index: 40;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+}
+
+#multiwasher-image img {
+    max-width: 80vw;
+    max-height: 80vh;
+    width: auto;
+    height: auto;
+    display: block;
+}
